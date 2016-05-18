@@ -1,0 +1,42 @@
+(in-package :shop2-user)
+
+(defproblem teste petrobras
+	(
+		(cargo cargo1 3000)
+		(cargo cargo2 1000)
+		(cargo cargo3 5000)
+		(vessel v1 100000 600)
+		(is-empty v1)
+		(vessel v2 100000 600)
+		(vessel v3 100000 600)
+		(is-empty v3)
+		(platform plat1 100000)
+		(location plat1 0 0)
+		(platform plat2 100000)
+		(location plat2 500 500)
+		(port p1 100000)
+		(location p1 600 600)
+		(port p2 100000)
+		(location p2 800 800)
+		(is-waiting-area plat1)
+		(is-waiting-area plat2)
+		(can-refuel plat2)
+		(can-refuel p1)
+		(cargo-at cargo1 plat1)
+		(cargo-at cargo2 plat1)
+		(cargo-at cargo3 p2)
+		(vessel-at v1 plat1)
+		(vessel-at v2 plat1)
+		(vessel-at v3 plat2)
+		(in-vessel v2 cargo2)
+	)
+	
+	( 
+		(cargo-at cargo1 p1)
+		(cargo-at cargo2 p1)
+		(cargo-at cargo3 p2)
+	)
+
+)
+
+(find-plans 'teste :verbose :plans)
