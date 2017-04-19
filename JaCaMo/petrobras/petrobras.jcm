@@ -1,0 +1,34 @@
+/* 
+    petrobras
+    ---------------------------
+
+    JaCaMo Project File
+    
+    This file defines the initial state of the MAS (initial agents, environment, organisation, ....)
+    
+    (see jacamo/doc/jcm.html for more information about what can be defined in this file)
+    
+    JaCaMo <VERSION>
+    <DATE>
+*/
+
+mas petrobras {
+
+    agent v0 : vessel.asl {
+    	focus : petrobras.v0view
+    }
+    agent v1 : vessel.asl {
+    	focus : petrobras.v1view
+    }
+    
+    workspace petrobras {
+    	artifact v0view: petrobras.PetrobrasDomain(0, 1)
+    	artifact v1view: petrobras.PetrobrasDomain(1, 1)
+    }
+    
+    // agent source path
+    asl-path: src/agt
+              src/agt/incS 
+
+}
+
