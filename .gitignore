@@ -1,0 +1,9 @@
+/bin
+/bin/
+/JaCaMo/petrobras/bin
+/JaCaMo/petrobras/bin/
+*.raw
+*.log
+*~
+*.bk
+e_r_r_o_r.txt
