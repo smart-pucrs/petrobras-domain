@@ -17,13 +17,15 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 +cargoAt(Cargo, LocGoal)
 <- !cargoAt(Cargo, LocGoal).
 
-/*   
+
+/* +!vesselAt */
+
+// not neccessary  
 // VesselAt -- Vessel in right location
 +!vesselAt(Vessel, LocTo)
-: vesselAt(Vessel, LocFrom) & LocFrom = LocTo
-<- //-vesselAt(Vessel, LocFrom);
-   vesselAt(Vessel, LocTo).
-*/
+: vesselAt(Vessel, LocFrom) & LocFrom = LocTo.
+//<- -vesselAt(Vessel, LocFrom);
+//   vesselAt(Vessel, LocTo).
 
 // VesselAt --  Vessel in wrong location
 +!vesselAt(Vessel, LocTo)
@@ -35,17 +37,19 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 : vesselAt(Vessel, LocFrom) & not (LocFrom = LocTo) & not vesselEmpty(Vessel)
 <- move_vessel(Vessel, LocFrom, LocTo, 3).
 
-/*   
+
+/* +!cargoAt */
+
+// not neccessary     
 // CargoAt -- Already there
 +!cargoAt(Cargo, LocGoal)
-: cargoAt(Cargo, LocNow) & LocNow = LocGoal
-<- //-cargoAt(Cargo, LocNow);
-   cargoAt(Cargo, LocGoal). 
-*/   
+: cargoAt(Cargo, LocNow) & LocNow = LocGoal.
+//<- -cargoAt(Cargo, LocNow);
+//   cargoAt(Cargo, LocGoal). 
 
 // CargoAt -- Vessel carrying cargo
 +!cargoAt(Cargo, LocGoal)
-: inVessel(Vessel, Cargo) & isWaitingArea(LocA)
+: inVessel(Cargo, Vessel) & isWaitingArea(LocA)
 <- vesselAt(Vessel, LocGoal);
    unload_vessel(Cargo, Vessel, LocGoal);
    vesselAt(Vessel, LocA).

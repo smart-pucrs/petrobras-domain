@@ -1,8 +1,13 @@
 package petrobras;
 
-public class Port extends CargoHolder{
+import cartago.*;
 
-	public Port(String name, int capacity, int x, int y) {
-		super(name, capacity, x, y);
+public class Port extends Artifact{
+	
+	@OPERATION
+    public void init(String name, int capacity, int x, int y) {
+		defineObsProperty("port", name, capacity);
+		defineObsProperty("location", name, x, y);
 	}
+	
 }

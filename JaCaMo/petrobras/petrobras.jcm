@@ -14,16 +14,35 @@
 
 mas petrobras {
 
-    agent v0 : vessel.asl {
-    	focus : petrobras.v0view
-    }
     agent v1 : vessel.asl {
-    	focus : petrobras.v1view
+    	join : pd, vessels
+    	focus : vessels.v1, pd.cargo1, pd.cargo2, pd.cargo3, pd.port1, pd.port2, pd.plat1, pd.plat2
     }
     
-    workspace petrobras {
-    	artifact v0view: petrobras.PetrobrasDomain(0, 1)
-    	artifact v1view: petrobras.PetrobrasDomain(1, 1)
+    agent v2 : vessel.asl {
+    	join : pd, vessels
+    	focus : vessels.v2, pd.cargo1, pd.cargo2, pd.cargo3, pd.port1, pd.port2, pd.plat1, pd.plat2
+    }
+    
+    agent v3 : vessel.asl {
+    	join : pd, vessels
+    	focus : vessels.v3, pd.cargo1, pd.cargo2, pd.cargo3, pd.port1, pd.port2, pd.plat1, pd.plat2
+    }
+    
+    workspace pd {
+		artifact cargo1 : petrobras.Cargo(cargo1, 3000, plat1)
+		artifact cargo2 : petrobras.Cargo(cargo2, 1000, plat1)
+		artifact cargo3 : petrobras.Cargo(cargo3, 5000, p2)
+		artifact port1 : petrobras.Port(p1, 100000, 600, 600)
+		artifact port2 : petrobras.Port(p2, 100000, 800, 800)
+		artifact plat1 : petrobras.Plataform(plat1, 100000, 0, 0, 1)
+		artifact plat2 : petrobras.Plataform(plat2, 100000, 500, 500, 1)
+    }
+    
+    workspace vessels {
+    	artifact v1 : petrobras.Vessel("v1", 100000, 600, "plat1")
+    	artifact v2 : petrobras.Vessel("v2", 100000, 600, "plat1", "cargo2")
+    	artifact v3 : petrobras.Vessel("v3", 100000, 600, "plat1")
     }
     
     // agent source path
@@ -31,4 +50,3 @@ mas petrobras {
               src/agt/incS 
 
 }
-
