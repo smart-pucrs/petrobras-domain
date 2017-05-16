@@ -66,6 +66,11 @@ public class Vessel extends Artifact {
 		removeObsPropertyByTemplate("vesselAt", vessel, null);
 		defineObsProperty("vesselAt", vessel, location);
 	}
+	
+	@OPERATION
+	void test(){
+		System.out.println("Teste");
+	}
 }
 
 

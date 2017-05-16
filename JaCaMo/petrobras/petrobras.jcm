@@ -47,6 +47,6 @@ mas petrobras {
     
     // agent source path
     asl-path: src/agt
-              src/agt/incS 
+              src/agt/inc
 
 }

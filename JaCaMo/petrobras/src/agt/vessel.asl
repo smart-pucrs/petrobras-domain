@@ -6,9 +6,9 @@
 calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2)**2 + (Y1 - Y2)**2) / 3).
 
 /* Initial goals */
-
+!start.
 /* Plans */
-
++!start <- test.
 /* a/2 vesselAt(Vessel, Location) */
 +vesselAt(Vessel, LocTo)
 <- !vesselAt(Vessel, Locto).
