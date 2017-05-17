@@ -20,11 +20,10 @@ public class Vessel extends Artifact {
 	}
 	
 	@OPERATION
-	void load_vessel(String cargo, String vessel, String location){
+	void load_vessel(String cargo, int cargoWeight, String vessel, String location){
 		ObsProperty thisVessel = getObsPropertyByTemplate("vessel", vessel, null, null);
-		ObsProperty opCargo =  getObsPropertyByTemplate("cargo", cargo, null);
 		
-		int newCapacity = thisVessel.intValue(1) - opCargo.intValue(1);
+		int newCapacity = thisVessel.intValue(1) - cargoWeight;
 		
 		thisVessel.updateValue(1, newCapacity);
 		removeObsPropertyByTemplate("vesselEmpty", vessel);
@@ -32,11 +31,10 @@ public class Vessel extends Artifact {
 	}
 	
 	@OPERATION
-	void unload_vessel(String cargo, String vessel, String location){
+	void unload_vessel(String cargo, int cargoWeight, String vessel, String location){
 		ObsProperty thisVessel = getObsPropertyByTemplate("vessel", vessel, null, null);
-		ObsProperty opCargo =  getObsPropertyByTemplate("cargo", cargo, null);
 		
-		int newCapacity = thisVessel.intValue(1) + opCargo.intValue(1);
+		int newCapacity = thisVessel.intValue(1) + cargoWeight;
 		
 		thisVessel.updateValue(1, newCapacity);
 		defineObsProperty("vesselEmpty", vessel);
@@ -44,16 +42,14 @@ public class Vessel extends Artifact {
 	}
 	
 	@OPERATION
-	void move_vessel(String vessel, String loc1, String loc2, int mod){
-		ObsProperty thisVessel = getObsPropertyByTemplate("vessel", vessel, null, null);
-		ObsProperty fromLocation = getObsPropertyByTemplate("location", loc1, null, null);
-		ObsProperty toLocation = getObsPropertyByTemplate("location", loc2, null, null);
+	void move_vessel(String vessel, String loc1, int x1, int y1, String loc2, int x2, int y2, int mod){
+		ObsProperty thisVessel = getObsPropertyByTemplate("vessel", vessel, null, null);		
 		
 		int fuel = thisVessel.intValue(2);
 		int updated_fuel = (int) (fuel - (
 				(Math.sqrt(
-				Math.pow((fromLocation.intValue(1) - toLocation.intValue(1)),2) +
-				Math.pow((fromLocation.intValue(2) - toLocation.intValue(2)),2) )) / mod
+				Math.pow((x1 - x2),2) +
+				Math.pow((y1 - y2),2) )) / mod
 				));
 		
 		thisVessel.updateValue(2, updated_fuel);
@@ -65,11 +61,6 @@ public class Vessel extends Artifact {
 	void vesselAt(String vessel, String location){
 		removeObsPropertyByTemplate("vesselAt", vessel, null);
 		defineObsProperty("vesselAt", vessel, location);
-	}
-	
-	@OPERATION
-	void test(){
-		System.out.println("Teste");
 	}
 }
 

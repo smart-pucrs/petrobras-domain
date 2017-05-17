@@ -8,7 +8,11 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 /* Initial goals */
 !start.
 /* Plans */
-+!start <- test.
++!start <- 
+load_vessel("cargo1", 3000, "v1", "plat1");
+move_vessel("v1", "plat1", 0, 0, "p1", 600, 600, 3);
+unload_vessel("cargo1", 3000, "v1", "p1").
+
 /* a/2 vesselAt(Vessel, Location) */
 +vesselAt(Vessel, LocTo)
 <- !vesselAt(Vessel, Locto).
@@ -29,13 +33,13 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 
 // VesselAt --  Vessel in wrong location
 +!vesselAt(Vessel, LocTo)
-: vesselAt(Vessel, LocFrom) & not (LocFrom = LocTo) & vesselEmpty(Vessel)
-<- move_vessel(Vessel, LocFrom, LocTo, 5).
+: vesselAt(Vessel, LocFrom) & not (LocFrom = LocTo) & vesselEmpty(Vessel) & location(Locfrom, X1, Y1) & location(LocTo, X2, Y2)
+<- move_vessel(Vessel, LocFrom, X1, Y1, LocTo, X2, Y2, 5).
 
 // VesselAt -- Vessel in right location but not empty
 +!vesselAt(Vessel, LocTo)
-: vesselAt(Vessel, LocFrom) & not (LocFrom = LocTo) & not vesselEmpty(Vessel)
-<- move_vessel(Vessel, LocFrom, LocTo, 3).
+: vesselAt(Vessel, LocFrom) & not (LocFrom = LocTo) & not vesselEmpty(Vessel) & location(Locfrom, X1, Y1) & location(LocTo, X2, Y2)
+<- move_vessel(Vessel, LocFrom, X1, Y1, LocTo, X2, Y2, 3).
 
 
 /* +!cargoAt */
@@ -49,9 +53,9 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 
 // CargoAt -- Vessel carrying cargo
 +!cargoAt(Cargo, LocGoal)
-: inVessel(Cargo, Vessel) & isWaitingArea(LocA)
+: inVessel(Cargo, Vessel) & isWaitingArea(LocA) & cargo(Cargo, Weight)
 <- vesselAt(Vessel, LocGoal);
-   unload_vessel(Cargo, Vessel, LocGoal);
+   unload_vessel(Cargo, Weight, Vessel, LocGoal);
    vesselAt(Vessel, LocA).
 
 // CargoAt -- Vessel in same location    
@@ -59,9 +63,9 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 : cargoAt(Cargo, LocNow) & vesselAt(Vessel, LocNow) & isWaitingArea(LocA) &
   cargo(Cargo, Weight) & vessel(Vessel, Capacity, Fuel) & 0 <= (Capacity - Weight) &
   location(LocGoal, X1, Y1) & location(LocNow, X2, Y2) & calculate_necessary_fuel(X1, Y1, X2, Y2, Result) &  Fuel >= Result
-<- load_vessel(Cargo, Vessel, LocNow);
+<- load_vessel(Cargo, Weight, Vessel, LocNow);
    vesselAt(Vessel, LocGoal);
-   unload_vessel(Cargo, Vessel, LocGoal);
+   unload_vessel(Cargo, Weight, Vessel, LocGoal);
    vesselAt(Vessel, LocA).
 
 // CargoAt -- Vessel in another location  
@@ -70,9 +74,9 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
   cargo(Cargo, Weight) & vessel(Vessel, Capacity, Fuel) & 0 <= (Capacity - Weight) &
   location(LocGoal, X1, Y1) & location(LocNow, X2, Y2) & calculate_necessary_fuel(X1, Y1, X2, Y2, Result) &  Fuel >= Result
 <- +vesselAt(Vessel, LocNow);
-   load_vessel(Cargo, Vessel, LocNow);
+   load_vessel(Cargo, Weight, Vessel, LocNow);
    vesselAt(Vessel, LocGoal);
-   unload_vessel(Cargo, Vessel, LocGoal);
+   unload_vessel(Cargo, Weight, Vessel, LocGoal);
    vesselAt(Vessel, LocA).   
    
 
