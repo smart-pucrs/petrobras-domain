@@ -8,7 +8,7 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 /* Initial goals */
 !start.
 /* Plans */
-+!start : .my_name(X) & (X == "v1")
++!start : .my_name(X) & (X == v1)
 <-
 load_vessel("cargo1", 3000, "v1", "plat1");
 move_vessel("v1", "plat1", 0, 0, "p1", 600, 600, 3);
@@ -16,7 +16,7 @@ unload_vessel("cargo1", 3000, "v1", "p1");
 move_vessel("v1", "p1", 600, 600, "plat1", 0, 0, 5);
 .
 
-+!start : .my_name(X) & (X == "v2")
++!start : .my_name(X) & (X == v2)
 <- 
 move_vessel("v2", "plat1", 0, 0, "p1", 600, 600, 3);
 unload_vessel("cargo2", 1000, "v2", "p1");
