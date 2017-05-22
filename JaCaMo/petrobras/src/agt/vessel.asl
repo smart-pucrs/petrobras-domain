@@ -8,34 +8,35 @@ calculate_necessary_fuel(X1, Y1, X2, Y2, Result) :- Result = math.sqrt(((X1 - X2
 /* Initial goals */
 !start.
 /* Plans */
-+!start : .my_name(X) & (X == v1)
++!start : .my_name(X) & (X == v1) & focused(pd, cargo1, Id)
 <-
 load_vessel("cargo1", 3000, "v1", "plat1");
+after_load("cargo1")[artifact_id(Id)];
 move_vessel("v1", "plat1", 0, 0, "p1", 600, 600, 3);
 unload_vessel("cargo1", 3000, "v1", "p1");
+after_unload("cargo1", "p1")[artifact_id(Id)];
 move_vessel("v1", "p1", 600, 600, "plat1", 0, 0, 5);
 .
 
-+!start : .my_name(X) & (X == v2)
-<- 
++!start : .my_name(X) & (X == v2) & focused(pd, cargo2, Id)
+<-
+after_load("cargo2")[artifact_id(Id)];
 move_vessel("v2", "plat1", 0, 0, "p1", 600, 600, 3);
 unload_vessel("cargo2", 1000, "v2", "p1");
+after_unload("cargo2", "p1")[artifact_id(Id)];
 move_vessel("v2", "p1", 600, 600, "plat1", 0, 0, 5);
 .
 
-+!start
-<-
-.my_name(X);
-.println(X).
++!start : .my_name(X) & (X == v3).
 
 
 /* a/2 vesselAt(Vessel, Location) */
-+vesselAt(Vessel, LocTo)
-<- !vesselAt(Vessel, Locto).
+//+vesselAt(Vessel, LocTo)
+//<- !vesselAt(Vessel, Locto).
 
 /* a/2 cargoAt(Cargo, Location) */
-+cargoAt(Cargo, LocGoal)
-<- !cargoAt(Cargo, LocGoal).
+//+cargoAt(Cargo, LocGoal)
+//<- !cargoAt(Cargo, LocGoal).
 
 
 /* +!vesselAt */

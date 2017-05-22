@@ -10,4 +10,19 @@ public class Cargo extends Artifact{
 		defineObsProperty("cargoAt", name, location);
 	}
 	
+	@OPERATION
+	public void after_load(String cargoName){
+		try {
+			removeObsPropertyByTemplate("cargoAt", cargoName, null);
+		} catch (Exception e) {}
+	}
+	
+	@OPERATION
+	public void after_unload(String cargoName, String location){
+		if(getObsPropertyByTemplate("cargoAt", cargoName, null) != null){
+			removeObsPropertyByTemplate("cargoAt", cargoName, null);
+		}
+		defineObsProperty("cargoAt", cargoName, location);
+	}
+	
 }

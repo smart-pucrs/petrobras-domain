@@ -15,7 +15,7 @@ public class Vessel extends Artifact {
     public void init(String name, int capacity, int fuel, String location, String cargo) {
 		defineObsProperty("vessel", name, capacity, fuel);
 		defineObsProperty("vesselAt", name, location);
-		defineObsProperty("inVessel", cargo, name);	
+		defineObsProperty("inVessel", cargo, name);
 	}
 	
 	@OPERATION
@@ -24,7 +24,6 @@ public class Vessel extends Artifact {
 		int newCapacity = thisVessel.intValue(1) - cargoWeight;
 		thisVessel.updateValue(1, newCapacity);
 		removeObsPropertyByTemplate("vesselEmpty", vessel);
-		removeObsPropertyByTemplate("cargoAt", cargo, null);
 		defineObsProperty("inVessel", cargo, vessel);	
 	}
 	
@@ -34,7 +33,6 @@ public class Vessel extends Artifact {
 		int newCapacity = thisVessel.intValue(1) + cargoWeight;
 		removeObsPropertyByTemplate("inVessel", cargo, vessel);
 		thisVessel.updateValue(1, newCapacity);
-		defineObsProperty("cargoAt",cargo,location);
 		defineObsProperty("vesselEmpty", vessel);
 	}
 	
