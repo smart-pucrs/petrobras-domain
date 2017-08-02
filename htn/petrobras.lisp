@@ -20,8 +20,6 @@
 ;;;  (can-refuel ?platform)
 ;;;  (location ?loc ?x ?y)
 ;;;  
-;;;  
-;;;  
 ;;;
 ;;;  Basic operators
 ;;;
@@ -46,7 +44,6 @@
                    ((cargo-at ?cargo ?loc)  
 				    (vessel ?vessel ?capacity ?fuel)
 					(is-empty ?vessel)
-				   (:protection (vessel-at ?vessel ?loc))
 				   )
 				   
                    ((in-vessel ?cargo ?vessel)
@@ -62,7 +59,7 @@
 				   )
                    ((in-vessel ?cargo ?vessel)
 					(vessel ?vessel ?capacity ?fuel)
-                    (:protection (vessel-at ?vessel ?loc)))
+                    )
                    ((cargo-at ?cargo ?loc)
 				    (vessel ?vessel ?new-capacity ?fuel)
 					(is-empty ?vessel)
@@ -71,16 +68,18 @@
 
         (:operator (!move-vessel ?vessel ?loc-from ?loc-to ?modifier)
 				   (
-					(location ?loc-from ?x1 ?y1)
-					(location ?loc-to ?x2 ?y2)
+					(location ?loc-from)
+					(location ?loc-to)
 					(vessel ?vessel ?capacity ?fuel)
-					(assign ?actual-fuel (- ?fuel (/ (sqrt(+ (expt (- ?x1 ?x2) 2)(expt (- ?y1 ?y2) 2))) ?modifier)))
+					(distance ?loc-from ?loc-to ?dist)
+					(assign ?actual-fuel (- ?fuel (/ ?dist ?modifier)))
 					)
                    ((vessel-at ?vessel ?loc-from)
 					(vessel ?vessel ?capacity ?fuel))
                    ((vessel-at ?vessel ?loc-to)
 					(vessel ?vessel ?capacity ?actual-fuel)
-                    (:protection (vessel-at ?vessel ?loc-to))))
+                   )
+        )
 
 
         ;; book-keeping methods & ops, to keep track of what needs to be done
@@ -128,9 +127,10 @@
 				(cargo ?cargo ?weight)
 				(vessel ?vessel ?actual-capacity ?fuel)
 				(eval (<= 0(- ?actual-capacity ?weight)))
-				(location ?loc-goal ?x1 ?y1)
-				(location ?loc-now ?x2 ?y2)
-				(assign ?necessary-fuel (/ (sqrt(+ (expt (- ?x1 ?x2) 2)(expt (- ?y1 ?y2) 2))) 3))
+				(location ?loc-goal)
+				(location ?loc-now)
+				(distance ?loc-from ?loc-to ?dist)
+				(assign ?necessary-fuel (/ ?dist 3))
 				(eval (<= ?necessary-fuel ?fuel))
 			)
             (:ordered
@@ -149,9 +149,10 @@
 				(vessel ?vessel ?actual-capacity ?fuel)
 				(cargo ?cargo ?weight)
 				(eval (<= 0 (- ?actual-capacity ?weight)))
-				(location ?loc-goal ?x1 ?y1)
-				(location ?loc-now ?x2 ?y2)
-				(assign ?necessary-fuel (/ (sqrt(+ (expt (- ?x1 ?x2) 2)(expt (- ?y1 ?y2) 2))) 3))
+				(location ?loc-goal)
+				(location ?loc-now)
+				(distance ?loc-from ?loc-to ?dist)
+				(assign ?necessary-fuel (/ ?dist 3))
 				(eval (<= ?necessary-fuel ?fuel))
             )
             (:ordered
@@ -184,7 +185,9 @@
            vessel-not-in-right-location-full
            ((vessel-at ?vessel ?loc-from)
             (different ?loc-from ?loc-to))
-           ((:task !move-vessel ?vessel ?loc-from ?loc-to 3)))
+           ((:task !move-vessel ?vessel ?loc-from ?loc-to 3))
+		   
+		)
 
     
 
@@ -193,23 +196,9 @@
         (:- (same ?x ?x) nil)
         (:- (different ?x ?y) ((not (same ?x ?y))))
 
-
         ))
 
 (eval-when (:load-toplevel)
   (petrobras-domain))
 
-
-
 ;;;--------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
