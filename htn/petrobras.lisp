@@ -81,6 +81,18 @@
                    )
         )
 
+        (:operator (!refuel-vessel ?vessel ?amount ?loc)
+        	(
+        	 (location ?loc)
+        	 (can-refuel ?loc)
+        	 (vessel-at ?vessel ?loc)
+        	 (vessel ?vessel ?capacity ?fuel)
+        	 (eval (<= (+ ?fuel ?amount) 600))
+        	)
+        	((vessel ?vessel ?capacity ?fuel))
+        	((vessel ?vessel ?capacity 600))
+        )
+
 
         ;; book-keeping methods & ops, to keep track of what needs to be done
         ;; !add-protection and !delete-protection are two special operators
@@ -103,6 +115,7 @@
 	
 		;; deliver
         (:method (cargo-at ?cargo ?loc-goal)
+
 			already-there
 			(
 				(cargo-at ?cargo ?loc-now)
@@ -110,6 +123,27 @@
 			)
 			((:task !add-protection (cargo-at ?cargo ?loc-goal)))
 			
+			 vessel-needs-refueling-on-current-location
+			(	
+				(vessel-at ?vessel ?loc-now)
+				(can-refuel ?loc-now)
+				(vessel ?vessel ?actual-capacity ?fuel)
+				(eval (<= ?fuel 300))
+				(assign ?necessary-fuel (- 600 ?fuel))
+            )
+            ((:task !refuel-vessel ?vessel ?necessary-fuel ?loc-now))
+
+            vessel-needs-refueling-on-another-location
+			(	
+				(vessel-at ?vessel ?loc-now)
+				(can-refuel ?loc-fuel)
+				(vessel ?vessel ?actual-capacity ?fuel)
+				(eval (<= ?fuel 300))
+            )
+            (:ordered
+			   (:task vessel-at ?vessel ?loc-fuel)
+			)
+
 			vessel-carrying-cargo
 			((in-vessel ?vessel ?cargo)
 			 (is-waiting-area ?loc))
